@@ -1,15 +1,10 @@
 
 import './App.css';
 import AppRoutes from "./routes/AppRoutes";
-import Home from './screens/Home';
+import Home from "./screens/ResponsiveDrawer";
 
 function App() {
-  return (
-    // <div>
-      <AppRoutes></AppRoutes>
-      // <Home></Home>
-    // </div>
-  );
+  return <AppRoutes></AppRoutes>;
 }
 
 export default App;
