@@ -1,16 +1,14 @@
-import logo from './logo.svg';
+
 import './App.css';
+import AppRoutes from "./routes/AppRoutes";
+import Home from './screens/Home';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-         welcome Ikka Badshah Begum Ghulam 🤣
-        </p>
-      </header>
-    </div>
+    // <div>
+      <AppRoutes></AppRoutes>
+      // <Home></Home>
+    // </div>
   );
 }
 
