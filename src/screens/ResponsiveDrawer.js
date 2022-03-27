@@ -15,12 +15,14 @@ import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import { useHistory } from "react-router-dom";
 
 const drawerWidth = 200;
 
 function ResponsiveDrawer(props) {
   const { window, children, title } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const history = useHistory();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -35,11 +37,30 @@ function ResponsiveDrawer(props) {
       </Toolbar>
       <Divider />
       <List>
-        <ListItem button key="home">
+        <ListItem
+          button
+          key="home"
+          onClick={() => {
+            history.push("/");
+          }}
+        >
           <ListItemIcon>
             <InboxIcon />
           </ListItemIcon>
           <ListItemText primary="home" />
+        </ListItem>
+        
+        <ListItem
+          button
+          key="about"
+          onClick={() => {
+            history.push("/about");
+          }}
+        >
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary="about" />
         </ListItem>
       </List>
       <Divider />

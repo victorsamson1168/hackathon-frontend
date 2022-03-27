@@ -1,9 +1,57 @@
+import { Card, CardContent, Grid, Paper, Typography } from "@mui/material";
 import React from "react";
+
+const styles = {
+  paperHeight: { height: "200px" },
+};
 
 function About() {
   return (
-    <div style={{ width: "100%", height: "100vh" }}>
-      <h1>about</h1>
+    <div style={{ width: "100%" }}>
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <Paper elevation={6} sx={styles.paperHeight}>
+            <CardContent>
+              <Typography>test</Typography>
+            </CardContent>
+          </Paper>
+        </Grid>
+        <Grid item xs={6}>
+          <Paper elevation={6} sx={styles.paperHeight}>
+            <CardContent>
+              <Typography>test</Typography>
+            </CardContent>
+          </Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper elevation={6} sx={styles.paperHeight}>
+            <CardContent>
+              <Typography>test</Typography>
+            </CardContent>
+          </Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper elevation={6} sx={styles.paperHeight}>
+            <CardContent>
+              <Typography>test</Typography>
+            </CardContent>
+          </Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper elevation={6} sx={styles.paperHeight}>
+            <CardContent>
+              <Typography>test</Typography>
+            </CardContent>
+          </Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper elevation={6} sx={styles.paperHeight}>
+            <CardContent>
+              <Typography>test</Typography>
+            </CardContent>
+          </Paper>
+        </Grid>
+      </Grid>
     </div>
   );
 }
