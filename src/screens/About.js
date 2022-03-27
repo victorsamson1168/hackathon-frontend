@@ -7,7 +7,7 @@ const styles = {
 
 function About() {
   return (
-    <div style={{ width: "100%" }}>
+    <div>
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <Paper elevation={6} sx={styles.paperHeight}>

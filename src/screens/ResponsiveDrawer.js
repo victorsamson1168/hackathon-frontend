@@ -41,6 +41,7 @@ function ResponsiveDrawer(props) {
           button
           key="home"
           onClick={() => {
+            handleDrawerToggle();
             history.push("/");
           }}
         >
@@ -49,11 +50,11 @@ function ResponsiveDrawer(props) {
           </ListItemIcon>
           <ListItemText primary="home" />
         </ListItem>
-        
         <ListItem
           button
           key="about"
           onClick={() => {
+            handleDrawerToggle();
             history.push("/about");
           }}
         >
@@ -77,8 +78,8 @@ function ResponsiveDrawer(props) {
     </div>
   );
 
-  // const container =
-  //   window !== undefined ? () => window().document.body : undefined;
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -111,7 +112,7 @@ function ResponsiveDrawer(props) {
         aria-label="mailbox folders"
       >
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        {/* <Drawer
+        <Drawer
           container={container}
           variant="temporary"
           open={mobileOpen}
@@ -128,7 +129,7 @@ function ResponsiveDrawer(props) {
           }}
         >
           {drawer}
-        </Drawer> */}
+        </Drawer>
         <Drawer
           variant="permanent"
           sx={{
