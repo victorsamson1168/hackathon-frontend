@@ -17,6 +17,8 @@ function Home() {
     emp_id: 'MnRN400',
     team: 'Dr.Clobo'
   }
+  const manager_name=['Amar Malik']
+  const team_mem_name=['Victor Samson','Akshay Arekar','Siddhant Sanadhaya']
   return (
     <div style={{ width: "100%", height: "100vh" }}>
       <Grid container spacing={2} >
@@ -27,6 +29,8 @@ function Home() {
         </Grid>
         <Grid item xs={6} >
           <TeamMemberCard
+          manager={manager_name}
+          team_member={team_mem_name}
           />
         </Grid>
         <Grid item xs={6} >

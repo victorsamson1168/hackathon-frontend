@@ -6,10 +6,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import DesktopMacOutlinedIcon from '@mui/icons-material/DesktopMacOutlined';
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
+import Badge from '@mui/material/Badge';
+import { styled } from '@mui/material/styles';
+import WorkspacePremiumTwoToneIcon from '@mui/icons-material/WorkspacePremiumTwoTone';
+
 
 const styles = {
     paperContainer: { width: "100%", height: "100vh" },
-    paperHeight: { height: "200px",borderRadius:2 },
+    paperHeight: { height: "200px", borderRadius: 2 },
     contentContainer: {
         width: '100%',
         display: 'flex',
@@ -18,8 +22,8 @@ const styles = {
         justifyContent: 'center'
     },
     designationRowStyle: { display: 'flex', flexDirection: 'row', marginTop: 5, marginBottom: 5 },
-    designationTextMargin: { marginLeft: 15,fontSize:14 },
-    userInfoContainer:{
+    designationTextMargin: { marginLeft: 15, fontSize: 14 },
+    userInfoContainer: {
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
@@ -27,18 +31,26 @@ const styles = {
         height: 150,
         marginLeft: 25
     },
-    editBtnStyle:{
+    editBtnStyle: {
         bgcolor: 'background.paper',
         boxShadow: 3,
         borderRadius: 5,
         height: 30,
         width: 100,
-        fontSize:12
+        fontSize: 12
     },
-    boldTxt:{fontWeight:'bold',fontSize:20},
-    
-   
+    boldTxt: { fontWeight: 'bold', fontSize: 20 },
 };
+
+const gold = "#FFD700";
+const silver = "#C0C0C0";
+const bronze = "#CD7F32";
+
+
+
+
+
+
 
 function ProfileCard({ data }) {
     console.log('useruseruser', data);
@@ -55,13 +67,27 @@ function ProfileCard({ data }) {
                 <div style={styles.contentContainer}>
                     <div>
                         <CardContent>
-                            <Avatar src="pa.jpg"
-                                sx={{ width: 150, height: 150, boxShadow: 3 }} />
+                            {/* <Badge
+                                overlap="circular"
+                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                badgeContent={
+                                    <WorkspacePremiumTwoToneIcon sx={{ width: 35, height: 35, color: gold }} />
+                                }
+                            >
+                                <Avatar alt="Travis Howard" src="pa.jpg"
+                                    sx={{ width: 150, height: 150, boxShadow: 3 }} />
+                            </Badge> */}
+                            <Avatar alt="Travis Howard" src="pa.jpg"
+                                    sx={{ width: 150, height: 150, boxShadow: 3 }} />
                         </CardContent>
                     </div>
                     <div style={styles.userInfoContainer}>
                         <div>
-                            <Typography sx={styles.boldTxt}>{name}</Typography>
+                            <div style={styles.designationRowStyle}>
+                                <Typography sx={styles.boldTxt}>{name}</Typography>
+                                <WorkspacePremiumTwoToneIcon sx={{ width: 28, height: 28, color: gold }} />
+                            </div>
+
                             <div style={styles.designationRowStyle}>
                                 <DesktopMacOutlinedIcon />
                                 <Typography style={styles.designationTextMargin}>{designation}</Typography>

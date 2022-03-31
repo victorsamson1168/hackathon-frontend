@@ -2,6 +2,7 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 import About from "../screens/About";
 import Home from "../screens/Home";
+import ScoreForm from "../screens/ScoreForm";
 import ResponsiveDrawer from "../screens/ResponsiveDrawer";
 
 function AppRoutes() {
@@ -21,6 +22,14 @@ function AppRoutes() {
         render={() => (
           <ResponsiveDrawer title="about">
             <About />
+          </ResponsiveDrawer>
+        )}
+      />
+      <Route
+        path="/ScoreForm"
+        render={() => (
+          <ResponsiveDrawer title="ScoreForm">
+            <ScoreForm />
           </ResponsiveDrawer>
         )}
       />
