@@ -43,7 +43,7 @@ function Home() {
         </Grid>
       </Grid>
 
-      <h1>test</h1>
+      <h1>testt</h1>
       <Box
         sx={{
           display: "flex",
