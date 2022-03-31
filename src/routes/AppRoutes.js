@@ -2,28 +2,31 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 import About from "../screens/About";
 import Home from "../screens/Home";
+import Login from "../screens/Login";
 import ResponsiveDrawer from "../screens/ResponsiveDrawer";
+import ProtectedRoute from "./ProtectedRoute";
 
 function AppRoutes() {
   return (
     <Switch>
-      <Route
+      <ProtectedRoute
         path="/"
         exact
-        render={() => (
+        component={() => (
           <ResponsiveDrawer title="home">
             <Home />
           </ResponsiveDrawer>
         )}
       />
-      <Route
+      <ProtectedRoute
         path="/about"
-        render={() => (
+        component={() => (
           <ResponsiveDrawer title="about">
             <About />
           </ResponsiveDrawer>
         )}
       />
+      <Route path="/login" component={() => <Login />} />
     </Switch>
   );
 }
