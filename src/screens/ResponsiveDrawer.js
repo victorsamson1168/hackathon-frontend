@@ -16,6 +16,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useHistory } from "react-router-dom";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Button } from "@mui/material";
 
 const drawerWidth = 200;
 
@@ -26,6 +28,11 @@ function ResponsiveDrawer(props) {
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const onLogout = () => {
+    localStorage.removeItem("token");
+    history.push("/login");
   };
 
   const drawer = (
@@ -75,6 +82,7 @@ function ResponsiveDrawer(props) {
           </ListItem>
         ))}
       </List>
+      <Divider />
     </div>
   );
 
@@ -91,7 +99,7 @@ function ResponsiveDrawer(props) {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -104,6 +112,12 @@ function ResponsiveDrawer(props) {
           <Typography variant="h6" noWrap component="div">
             {title}
           </Typography>
+          <Button variant="contained" color="error" size="small" onClick={onLogout}>
+            <Typography sx={{ fontSize: "0.9rem" }} m1>
+              logout
+            </Typography>
+            <LogoutIcon />
+          </Button>
         </Toolbar>
       </AppBar>
       <Box
