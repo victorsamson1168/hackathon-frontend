@@ -57,6 +57,7 @@ function ResponsiveDrawer(props) {
           </ListItemIcon>
           <ListItemText primary="home" />
         </ListItem>
+
         <ListItem
           button
           key="about"
@@ -73,12 +74,17 @@ function ResponsiveDrawer(props) {
       </List>
       <Divider />
       <List>
-        {["360 review", "history", "analysis"].map((text, index) => (
-          <ListItem button key={text}>
+        {["360 review", "History", "Analysis", "ScoreForm"].map((text, index) => (
+          <ListItem button key={text}
+            onClick={() => {
+              handleDrawerToggle();
+              history.push("/" + text );
+            }}
+          >
             <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
+          {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+        </ListItemIcon>
+        <ListItemText primary={text} />
           </ListItem>
         ))}
       </List>

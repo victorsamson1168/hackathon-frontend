@@ -20,19 +20,24 @@ const styles = {
 function Home() {
 
   const user_data = {
-    name: "Parag Agrawal",
-    designation: "Software Developer",
-    emp_id: "MnRN400",
-    team: "Dr.Clobo",
-  };
+    name: 'Parag Agrawal',
+    designation: 'Software Developer',
+    emp_id: 'MnRN400',
+    team: 'Dr.Clobo'
+  }
+  const manager_name=['Amar Malik']
+  const team_mem_name=['Victor Samson','Akshay Arekar','Siddhant Sanadhaya']
   return (
     <div style={{ width: "100%", height: "100vh" }}>
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <ProfileCard data={user_data} />
         </Grid>
-        <Grid item xs={6}>
-          <TeamMemberCard />
+        <Grid item xs={6} >
+          <TeamMemberCard
+          manager={manager_name}
+          team_member={team_mem_name}
+          />
         </Grid>
         <Grid item xs={6}>
           <div style={styles.paperContainer}>
