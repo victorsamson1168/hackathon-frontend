@@ -65,7 +65,7 @@ function ProfileCard({ data }) {
         <div style={styles.paperContainer}>
             <Paper elevation={6} sx={styles.paperHeight} >
                 <div style={styles.contentContainer}>
-                    <div>
+                    <div> 
                         <CardContent>
                             {/* <Badge
                                 overlap="circular"
