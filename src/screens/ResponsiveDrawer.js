@@ -24,6 +24,7 @@ let drawerWidth = 200;
 function ResponsiveDrawer(props) {
   const { window, children, title, showDrawer } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const user_details = JSON.parse(localStorage.getItem("user_details"));
   const history = useHistory();
   if (!showDrawer) {
     drawerWidth = 0;
@@ -77,23 +78,35 @@ function ResponsiveDrawer(props) {
       </List>
       <Divider />
       <List>
-        {["360 review", "History", "Analysis", "ScoreForm"].map(
-          (text, index) => (
-            <ListItem
-              button
-              key={text}
-              onClick={() => {
-                handleDrawerToggle();
-                history.push("/" + text);
-              }}
-            >
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          )
-        )}
+        <ListItem
+          button
+          key="ScoreForm"
+          onClick={() => {
+            handleDrawerToggle();
+            history.push("/" + "ScoreForm");
+          }}
+        >
+          <ListItemIcon>
+            <MailIcon />
+          </ListItemIcon>
+          <ListItemText primary="ScoreForm" />
+        </ListItem>
+
+        {user_details.isHr ? (
+          <ListItem
+            button
+            key="HR"
+            onClick={() => {
+              handleDrawerToggle();
+              history.push("/" + "HR");
+            }}
+          >
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="HR" />
+          </ListItem>
+        ) : null}
       </List>
       <Divider />
     </div>

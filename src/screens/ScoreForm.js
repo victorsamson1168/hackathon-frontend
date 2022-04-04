@@ -106,7 +106,9 @@ function ScoreForm() {
     //       setBeyondErrorRev(false);
     //   }
     if (!activeEmpFormId) {
-      alert("please select employee");
+      setMessage("please select employee");
+      setType("error");
+      setOpen(true);
       return;
     } else if (
       isNaN(meetingScore) ||
