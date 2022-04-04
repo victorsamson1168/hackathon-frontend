@@ -341,7 +341,6 @@ function ScoreForm() {
                   label="team"
                   // onChange={handleChange}
                   size="small"
-                  sx={{ fontSize: 14, fontWeight: "bold" }}
                 >
                   <MenuItem value="drclobo">drclobo </MenuItem>
                   <MenuItem value="i Craft">i Craft</MenuItem>
