@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import About from "../screens/About";
 import Home from "../screens/Home";
 import ScoreForm from "../screens/ScoreForm";
+import HRaudit from "../screens/HRaudit";
 import Login from "../screens/Login";
 import Nominations from "../screens/Nominations";
 import Eom from "../screens/Eom";
@@ -50,6 +51,14 @@ function AppRoutes() {
         component={() => (
           <ResponsiveDrawer title="score form"  showDrawer={true}>
             <ScoreForm />
+          </ResponsiveDrawer>
+        )}
+      />
+      <ProtectedRoute
+        path="/HR"
+        component={() => (
+          <ResponsiveDrawer title="HR audit"  showDrawer={true}>
+            <HRaudit/>
           </ResponsiveDrawer>
         )}
       />
