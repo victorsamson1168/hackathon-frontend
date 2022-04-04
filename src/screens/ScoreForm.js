@@ -9,6 +9,7 @@ import {
   Chip,
   Snackbar,
   Alert,
+  LinearProgress,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
@@ -60,14 +61,19 @@ function ScoreForm() {
   const [message, setMessage] = useState("");
   const [type, setType] = useState("");
   const [teamMembers, setTeamMembers] = useState([]);
+  const [memberLoading, setMemberLoading] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
 
   const getChildList = async () => {
+    setMemberLoading(true);
     try {
       const response = await API.getChildList();
       setTeamMembers(response?.data?.data);
       console.log(response);
+      setMemberLoading(false);
     } catch (error) {
       console.log(error);
+      setMemberLoading(false);
     }
   };
 
@@ -230,6 +236,7 @@ function ScoreForm() {
 
   const saveUserApiCall = async () => {
     //   alert("api call " + activeEmpFormId);
+    setFormLoading(true);
     try {
       const response = await API.postScore([
         {
@@ -270,13 +277,19 @@ function ScoreForm() {
         setMessage("successfully updated");
         setType("success");
         setOpen(true);
+        setFormLoading(false);
       } else {
         setMessage("something went wrong");
         setType("error");
         setOpen(true);
+        setFormLoading(false);
       }
     } catch (error) {
       console.log(error);
+      setMessage("something went wrong");
+      setType("error");
+      setOpen(true);
+      setFormLoading(false);
     }
   };
 
@@ -295,6 +308,7 @@ function ScoreForm() {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Paper elevation={6} sx={styles.paperHeight}>
+            {memberLoading ? <LinearProgress /> : null}
             <CardContent>
               <div style={styles.teamRowStyle}>
                 {teamMembers.map((item, index) => (
@@ -325,6 +339,7 @@ function ScoreForm() {
         </Grid>
         <Grid item xs={12}>
           <Paper elevation={6} sx={styles.paperHeight}>
+            {formLoading ? <LinearProgress /> : null}
             <CardContent>
               {activeEmpFormName != null && activeEmpFormName != "" && (
                 <Chip
