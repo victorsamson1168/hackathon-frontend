@@ -21,7 +21,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState(false);
+  const [message, setMessage] = useState("");
   const history = useHistory();
 
   const handleClose = () => {
