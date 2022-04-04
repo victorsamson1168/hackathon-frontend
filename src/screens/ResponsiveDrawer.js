@@ -77,7 +77,7 @@ function ResponsiveDrawer(props) {
       </List>
       <Divider />
       <List>
-        {["360 review", "History", "Analysis", "ScoreForm"].map(
+        {["360 review", "History", "Analysis", "ScoreForm","HR"].map(
           (text, index) => (
             <ListItem
               button
