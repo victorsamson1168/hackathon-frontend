@@ -4,6 +4,8 @@ import About from "../screens/About";
 import Home from "../screens/Home";
 import ScoreForm from "../screens/ScoreForm";
 import Login from "../screens/Login";
+import Nominations from "../screens/Nominations";
+import Eom from "../screens/Eom";
 import ResponsiveDrawer from "../screens/ResponsiveDrawer";
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -14,7 +16,7 @@ function AppRoutes() {
         path="/"
         exact
         component={() => (
-          <ResponsiveDrawer title="home">
+          <ResponsiveDrawer title="home" showDrawer={true}>
             <Home />
           </ResponsiveDrawer>
         )}
@@ -22,15 +24,31 @@ function AppRoutes() {
       <ProtectedRoute
         path="/about"
         component={() => (
-          <ResponsiveDrawer title="about">
+          <ResponsiveDrawer title="about" showDrawer={true}>
             <About />
           </ResponsiveDrawer>
         )}
       />
-      <Route
-        path="/ScoreForm"
-        render={() => (
-          <ResponsiveDrawer title="ScoreForm">
+      <ProtectedRoute
+        path="/nominations"
+        component={() => (
+          <ResponsiveDrawer title="nominations" showDrawer={false}>
+            <Nominations />
+          </ResponsiveDrawer>
+        )}
+      />
+      <ProtectedRoute
+        path="/eom"
+        component={() => (
+          <ResponsiveDrawer title="employee of the month" showDrawer={false}>
+            <Eom />
+          </ResponsiveDrawer>
+        )}
+      />
+      <ProtectedRoute
+        path="/scoreform"
+        component={() => (
+          <ResponsiveDrawer title="score form"  showDrawer={true}>
             <ScoreForm />
           </ResponsiveDrawer>
         )}
