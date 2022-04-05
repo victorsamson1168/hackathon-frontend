@@ -17,9 +17,10 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useHistory } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Button } from "@mui/material";
+import { Button, Grid } from "@mui/material";
+import ProfileCard from "../components/ProfileCard/ProfileCard";
 
-let drawerWidth = 200;
+let drawerWidth = 225;
 
 function ResponsiveDrawer(props) {
   const { window, children, title, showDrawer } = props;
@@ -36,16 +37,30 @@ function ResponsiveDrawer(props) {
 
   const onLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user_details");
     history.push("/login");
   };
 
   const drawer = (
     <div>
       <Toolbar>
-        <Typography variant="h6" noWrap>
+        {/* <Typography variant="h6" noWrap>
           PMP
-        </Typography>
+        </Typography> */}
+        <img src="/logo.png" alt="logo" style={{ width: "90%" }} />
       </Toolbar>
+      <Divider />
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <ProfileCard data="pa.jpg" />
+        </Grid>
+        {/* <Grid item xs={6}>
+          <TeamMemberCard
+            manager="{manager_name}"
+            team_member="{team_mem_name}"
+          />
+        </Grid> */}
+      </Grid>
       <Divider />
       <List>
         <ListItem
@@ -123,6 +138,9 @@ function ResponsiveDrawer(props) {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
+          background: "rgb(244,129,38)",
+          background:
+            "linear-gradient(90deg, rgba(244,129,38,1) 0%, rgba(238,83,75,0.8746849081429446) 49%, rgba(233,45,118,1) 100%)",
         }}
       >
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -138,12 +156,7 @@ function ResponsiveDrawer(props) {
           <Typography variant="h6" noWrap component="div">
             {title}
           </Typography>
-          <Button
-            variant="contained"
-            color="error"
-            size="small"
-            onClick={onLogout}
-          >
+          <Button variant="contained" size="small" onClick={onLogout}>
             <Typography sx={{ fontSize: "0.9rem" }} m1>
               logout
             </Typography>
