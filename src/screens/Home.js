@@ -1,16 +1,23 @@
-import { Avatar, Badge, Box, Button, styled } from "@mui/material";
-import React, { useState } from "react";
+import { Avatar, Badge, Box, Button, styled, CircularProgress } from "@mui/material";
+import React, { useState, useEffect } from "react";
+
 import { Grid, Paper, Typography, FormControl, InputLabel, Select, MenuItem, Chip, SimpleDialog } from "@mui/material";
 import ProfileCard from "../components/ProfileCard/ProfileCard";
 import TeamMemberCard from "../components/TeamMemberCard/TeamMemberCard";
 import ReviewTable from "../components/ReviewTable/ReviewTable";
 import Pie from "../components/circularRating";
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
+import LinearProgressAnimated from '@mui/material/LinearProgress';
 import { AreaChart, LineChart, Line, Area, XAxis, YAxis, Legend, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Label } from 'recharts';
 import DangerousOutlinedIcon from '@mui/icons-material/DangerousOutlined';
 import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import TooltipNormal from '@mui/material/Tooltip';
+
+
+import API from "../services/APIService";
+
 
 
 
@@ -156,31 +163,31 @@ const data = [
 
 const radarData = [
   {
-    que_type: 'Attendance',
+    que_text: 'Attendance',
     A: 800,
     B: 700,
     fullMark: 1000,
   },
   {
-    que_type: 'Meeting Participation',
+    que_text: 'Meeting Participation',
     A: 600,
     B: 800,
     fullMark: 1000,
   },
   {
-    que_type: 'Task and Deadlines',
+    que_text: 'Task and Deadlines',
     A: 1000,
     B: 800,
     fullMark: 1000,
   },
   {
-    que_type: 'Interpersonal Behaviour',
+    que_text: 'Interpersonal Behaviour',
     A: 700,
     B: 900,
     fullMark: 1000,
   },
   {
-    que_type: 'Above and Beyond',
+    que_text: 'Above and Beyond',
     A: 600,
     B: 900,
     fullMark: 1000,
@@ -221,31 +228,118 @@ function customTick({ payload, x, y, textAnchor, stroke, radius }) {
 }
 
 function Home() {
-
-  const [scores, setScores] = useState([
-    {
-      type: 'Meeting Participation',
-      score: 600,
-    },
-    {
-      type: 'Task and Deadlines',
-      score: 400,
-    },
-    {
-      type: 'Interpersonal Behaviour',
-      score: 800,
-    },
-    {
-      type: 'Above and Beyond',
-      score: 1000,
-    }
-  ])
+  const user_obj = JSON.parse(localStorage.getItem("user_details"))
+  const { uuid, first_name, last_name } = user_obj
+  // console.log('--------------uuid', uuid);
+  const [myScoreLoading, setMyScoreLoading] = useState(false);
+  const [graphLoading, setGraphLoading] = useState(false);
+  const [radarLoading, setRadarLoading] = useState(false);
+  const [myName, setMyName] = useState(first_name + " " + last_name);
+  const [contrastedWith, setContrastedWith] = useState("");
+  const [scores, setScores] = useState([])
+  const [colleagues, setColleagues] = useState([])
+  const [radarArray, setRadarArray] = useState([])
+  const [contrastedTo, setContrastedTo] = useState(null)
   const [lastMonth, setLastMonth] = React.useState("March");
   const [selectedMonth, setSelectedMonth] = React.useState('');
   const [openMonthDialog, setOpenMonthDialog] = React.useState(false);
-  const [scoreFound, setScoreFound] = React.useState(200);    // 404 not found 200 success 405 invalid
+  const [scoreFound, setScoreFound] = React.useState(200); // 404 not found 200 success 405 invalid
 
 
+  useEffect(() => {
+    getYourColleagues();
+    getUserScores(3);
+  }, []);
+
+  const getYourColleagues = async () => {
+    try {
+      setRadarLoading(true)
+      const response = await API.getColleagues(uuid);
+      if (response.status === 200 && response.data.result) {
+        let team_mates = response.data.data.filter((item) => item.uuid != uuid)
+        setColleagues(team_mates)
+        setContrastedTo(team_mates[0])
+        setContrastedWith(team_mates[0].first_name + " " + team_mates[0].last_name)
+        createRadarData(team_mates[0].uuid, uuid);
+      }
+      
+    } catch (error) {
+      console.log('catch err', error);
+      setRadarLoading(false);
+    }
+  };
+
+
+  const createRadarData = async (othersId, myId) => {
+    let sample_arr = [];
+    let month = 3;
+
+    try {
+      setRadarLoading(true);
+      const response = await API.getUserScore(othersId, month);
+      if (response.status === 200) {
+        response.data.dbResponse.forEach((item, ind) => {
+          if (myId) {
+            sample_arr.push(
+              {
+                que_text: item.PMP_QUETION.quetion_text,
+                A: 0,
+                B: item.score ? item.score : 0,
+                fullMark: item.PMP_QUETION.out_of,
+              }
+            )
+          } else {
+            let radar_arr_copy = radarArray;
+            radar_arr_copy[ind].B = item.score ? item.score : 0
+            setRadarArray(radar_arr_copy)
+          }
+
+        })
+        if (myId) {
+          try {
+            setRadarLoading(true);
+            const response = await API.getUserScore(myId, month);
+            if (response.status === 200) {
+              response.data.dbResponse.forEach((item, index) => {
+                sample_arr[index].A = item.score ? item.score : 0;
+              })
+              setRadarArray(sample_arr)
+            }
+            setRadarLoading(false);
+          } catch (error) {
+            console.log('catch err', error);
+            setRadarLoading(false);
+          }
+        }
+      }
+      setRadarLoading(false);
+    } catch (error) {
+      console.log('catch err', error);
+      setRadarLoading(false);
+    }
+  }
+
+  const getUserScores = async (month) => {
+
+    try {
+      setMyScoreLoading(true);
+      const response = await API.getUserScore(uuid, month);
+      if (response.status === 200) {
+        if (response.data.dbResponse?.length > 0) {
+          setScoreFound(200)
+          let arr = response.data.dbResponse
+          setScores(arr);
+        }else{
+          setScoreFound(404)
+          setScores([]);
+        }
+      }
+      setMyScoreLoading(false);
+    } catch (error) {
+      console.log('catch err', error);
+      setMyScoreLoading(false);
+    }
+  };
 
   const handleChange = (event) => {
 
@@ -254,17 +348,26 @@ function Home() {
     console.log('upcoming_month', upcoming_month);
     if (upcoming_month.includes(event.target.value)) {
       setScoreFound(405)
-    } else if (event.target.value == "January") {
-      setScoreFound(404)
+      setScores([]);
     } else {
-      setScoreFound(200)
-    }
+      getUserScores(months.indexOf(event.target.value) + 1);
+    }    
     setLastMonth(event.target.value);
+  };
+
+
+  const handleChangeContrastWith = (event) => {
+
+    console.log('handleChangeContrastWith', event);
+    setContrastedTo(event.target.value)
+    setContrastedWith(event.target.value.first_name + " " + event.target.value.last_name)
+    createRadarData(event.target.value.uuid);
   };
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <Paper elevation={3} sx={{ ...styles.singleScoreCard, marginBottom: 2 }}>
+      {myScoreLoading ? <LinearProgressAnimated sx={{marginTop:-1,marginBottom:1}}/> : null}
         <Grid item xs={12}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 1 }}>
             {lastMonth != null && lastMonth != "" &&
@@ -315,22 +418,28 @@ function Home() {
           </Box>
         </Grid>
         <Grid container spacing={1}>
-          {scores.map((item, index) => (
-            <Grid item xs={3} >
-              {/* <Paper elevation={6} sx={styles.singleScoreCard}> */}
-              <Box sx={styles.singleScoreCardBox}>
-                <Typography>{item.type}</Typography>
-                <Box>
-                  <BorderLinearProgress variant="determinate" value={item.score / 10} points={item.score} />
+          {scores.map((item, index) => {
+            return (
+              <Grid item xs={12 / 5} >
+                <Box sx={styles.singleScoreCardBox}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Typography sx={{ fontSize: 15 }}>{item.PMP_QUETION.quetion_text}</Typography>
+                    <TooltipNormal title="Weightage" placement="top">
+                      <Typography sx={{ fontSize: 15, fontWeight: 'bold' }}>{item.PMP_QUETION.eval_percentage}{'%'}</Typography>
+                    </TooltipNormal>
+                  </Box>
+                  <Box>
+                    <BorderLinearProgress variant="determinate" value={item.score / 10} points={item.score} />
+                  </Box>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Typography sx={{ fontSize: 15 }}>Score</Typography>
+                    <Typography sx={{ fontSize: 15 }}>{item.score}</Typography>
+                  </Box>
                 </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Typography>Score</Typography>
-                  <Typography>{item.score}</Typography>
-                </Box>
-              </Box>
-              {/* </Paper> */}
-            </Grid>
-          ))}
+              </Grid>
+            )
+          }
+          )}
         </Grid>
       </Paper>
 
@@ -341,29 +450,6 @@ function Home() {
               <Typography sx={{ fontSize: 16, fontWeight: 'bold' }}>Your progress for this year</Typography>
             </Box>
             <ResponsiveContainer width={850} height={400}>
-
-              {/* <AreaChart
-                width={850}
-                height={400}
-                data={data}
-                margin={{
-                  top: 30,
-                  right: 30,
-                  left: 0,
-                  bottom: 0,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis type="number" domain={[0, 5000]} />
-                <Tooltip />
-                <Area type="monotone" dataKey="attendance" stackId="1" stroke="violet" fill="rgba((238,130,0.5))" />
-                <Area type="monotone" dataKey="meeting" stackId="1" stroke="brown" fill="rgba(165, 42, 42, 0.5)" />
-                <Area type="monotone" dataKey="taskAndDeadline" stackId="1" stroke="green" fill="rgba(0,128,0, 0.5)" />
-                <Area type="monotone" dataKey="behaviour" stackId="1" stroke="orange" fill="rgba(255,165,0, 0.5)" />
-                <Area type="monotone" dataKey="aboveAndBeyond" stackId="1" stroke="blue" fill="rgba(0,0,255, 0.5)" />
-              </AreaChart> */}
-
               <LineChart
                 width={850}
                 height={400}
@@ -381,27 +467,53 @@ function Home() {
                 <Tooltip />
                 <Legend />
                 <Line type="monotone" dataKey="attendance" stroke="violet" />
-                <Line type="monotone" dataKey="meeting" stroke="brown" dot={<CustomizedDot />} />
-                <Line type="monotone" dataKey="taskAndDeadline" stroke="green" dot={<CustomizedDot />} />
-                <Line type="monotone" dataKey="behaviour" stroke="orange" dot={<CustomizedDot />} />
-                <Line type="monotone" dataKey="aboveAndBeyond" stroke="blue" dot={<CustomizedDot />} />
+                <Line type="monotone" dataKey="meeting" stroke="brown"
+                // dot={<CustomizedDot />}
+                />
+                <Line type="monotone" dataKey="taskAndDeadline" stroke="green" />
+                <Line type="monotone" dataKey="behaviour" stroke="orange" />
+                <Line type="monotone" dataKey="aboveAndBeyond" stroke="blue" />
               </LineChart>
-
             </ResponsiveContainer>
           </Paper>
         </Grid>
         <Grid item xs={4}>
           <Paper elevation={6} sx={styles.singleScoreCard}>
-            <Box>
-              <Typography sx={{ fontSize: 16, fontWeight: 'bold' }}>Contrast</Typography>
+          {radarLoading ? <LinearProgressAnimated sx={{marginTop:-1,marginBottom:1}}/> : null}
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Typography sx={{ fontSize: 16, fontWeight: 'bold' }}>Contrast with</Typography>
+
+
+              <Box sx={{ width: 150 }}>
+                <FormControl fullWidth>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={contrastedTo}
+                    onChange={handleChangeContrastWith}
+                    size="small"
+                    sx={{ height: 27, fontSize: 14, fontWeight: 'bold' }}
+                  >
+                    {colleagues.map((item, index) => {
+                      return (
+                        <MenuItem
+                          key={item.uuid} value={item}
+                        // value={item.uuid}
+                        >{item.first_name + " " + item.last_name}</MenuItem>
+                      )
+                    })}
+                  </Select>
+                </FormControl>
+              </Box>
+
             </Box>
             <ResponsiveContainer width={400} height={250}>
-              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
+              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarArray}>
                 <PolarGrid />
-                <PolarAngleAxis dataKey='que_type' tick={customTick} />
+                <PolarAngleAxis dataKey='que_text' tick={customTick} />
                 <PolarRadiusAxis angle={30} domain={[0, 150]} />
-                <Radar name="Mike" dataKey="A" stroke="brown" fill="rgba(165, 42, 42, 0.5)" fillOpacity={0.6} />
-                <Radar name="Lily" dataKey="B" stroke="blue" fill="rgba(0,0,255, 0.5)" fillOpacity={0.6} />
+                <Radar name={myName} dataKey="A" stroke="brown" fill="rgba(165, 42, 42, 0.5)" fillOpacity={0.6} />
+                <Radar name={contrastedWith} dataKey="B" stroke="blue" fill="rgba(0,0,255, 0.5)" fillOpacity={0.6} />
                 <Legend />
               </RadarChart>
             </ResponsiveContainer>
@@ -411,15 +523,14 @@ function Home() {
                 borderTopLeftRadius: 6, borderTopRightRadius: 6
               }}>
                 <Typography sx={{ width: 200, fontSize: 15, fontWeight: 'bold', }}>{'Specific to area'}</Typography>
-                <Typography sx={{ width: 25, fontSize: 15, fontWeight: 'bold', textAlign: 'right' }}>{'Mike'}</Typography>
-                <Typography sx={{ width: 25, fontSize: 15, fontWeight: 'bold', textAlign: 'right' }}>{'Lily'}</Typography>
+                <Typography sx={{ width: 80, fontSize: 15, fontWeight: 'bold', textAlign: 'right' }}>{myName}</Typography>
+                <Typography sx={{ width: 80, fontSize: 15, fontWeight: 'bold', textAlign: 'right' }}>{contrastedWith}</Typography>
               </Box>
-
-              {radarData.map((item, index) => (
+              {radarArray.map((item, index) => (
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingRight: 1, paddingLeft: 1 }}>
-                  <Typography sx={{ width: 200, fontSize: 13 }}>{item.que_type}</Typography>
-                  <Typography sx={{ width: 25, fontSize: 13, textAlign: 'right' }}>{item.A}</Typography>
-                  <Typography sx={{ width: 25, fontSize: 13, textAlign: 'right' }}>{item.B}</Typography>
+                  <Typography sx={{ width: 200, fontSize: 13 }}>{item.que_text}</Typography>
+                  <Typography sx={{ width: 80, fontSize: 13, textAlign: 'right' }}>{item.A}</Typography>
+                  <Typography sx={{ width: 80, fontSize: 13, textAlign: 'right' }}>{item.B}</Typography>
                 </Box>
               ))}
             </Box>
