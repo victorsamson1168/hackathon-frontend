@@ -25,7 +25,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import RedeemOutlinedIcon from '@mui/icons-material/RedeemOutlined';
 import moment from "moment";
 import API from "../services/APIService";
-
+import Lottie from "lottie-web";
 
 
 
@@ -173,7 +173,7 @@ const team_mem_name = ['Victor Samson', 'Akshay Arekar', 'Siddhant Sanadhaya']
 
 function Home() {
   const user_obj = JSON.parse(localStorage.getItem("user_details"))
-  const { uuid, first_name, last_name } = user_obj
+  const { uuid, first_name, last_name, reportTo } = user_obj
   // console.log('--------------uuid', uuid);
   const [myScoreLoading, setMyScoreLoading] = useState(false);
   const [graphLoading, setGraphLoading] = useState(false);
@@ -183,6 +183,8 @@ function Home() {
   const [contrastedWith, setContrastedWith] = useState("");
   const [scores, setScores] = useState([])
   const [colleagues, setColleagues] = useState([])
+  const [manager, setManager] = useState("")
+  const [managerPic, setManagerPic] = useState("")
   const [radarArray, setRadarArray] = useState([])
   const [lineChartArray, setLineChartArray] = useState([])
   const [contrastedTo, setContrastedTo] = useState(null)
@@ -193,15 +195,40 @@ function Home() {
   const [openedCommentIndex, setOpenedCommentIndex] = React.useState(null);
   const [expanded, setExpanded] = useState(false);
 
+  const imageref = React.useRef(null);
 
   useEffect(() => {
+    getManager();
     getYourColleagues();
     getUserScores(moment().month());
     getCurrentYearScore();
+    Lottie.loadAnimation({
+      container: imageref.current, // the dom element that will contain the animation
+      renderer: "svg",
+      loop: true,
+      autoplay: true,
+      animationData: require("../assets/animations/gift.json"), // the path to the animation json
+    });
 
     // moment().month(),
     //     moment().year(),
   }, []);
+
+  const getManager = async () => {
+    try {
+
+      const response = await API.getUserById(reportTo);
+      if (response.status === 200 && response.data.result) {
+        let data = response.data.data;
+        setManager(`${data.first_name} ${data.last_name}`)
+        setManagerPic(data.image_url)
+      }
+
+    } catch (error) {
+      console.log('catch err', error);
+      setRadarLoading(false);
+    }
+  };
 
   const getYourColleagues = async () => {
     try {
@@ -222,7 +249,7 @@ function Home() {
     }
   };
 
-  const getCurrentYearScore = async () => {    
+  const getCurrentYearScore = async () => {
     let line_chart_array = [];
     try {
       setGraphLoading(true)
@@ -414,13 +441,15 @@ function Home() {
               {totalScore &&
                 <Chip
                   label={"Total Score : " + totalScore}
-                  variant="outlined"
+                  // variant="outlined"
                   color={'success'}
                   fullWidth
                   sx={{
                     marginBottom: 0, height: 27,
                     fontWeight: 'bold',
-                    marginLeft: 3
+                    marginLeft: 3,
+                    // backgroundColor: '#1bb816',
+                    // color: '#ffffff',
                   }}
                 />
               }
@@ -464,11 +493,11 @@ function Home() {
               <Grid item xs={12 / 5} >
                 <Box sx={styles.singleScoreCardBox}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Typography sx={{ fontSize: 15 }}>{item.PMP_QUETION.quetion_text}</Typography>
+                    <Typography sx={{ fontSize: 16 }}>{item.PMP_QUETION.quetion_text}</Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Typography sx={{ fontSize: 15 }}>{"Contribution"}</Typography>
-                    <Typography sx={{ fontSize: 15, fontWeight: 'bold' }}>{item.PMP_QUETION.eval_percentage}{'%'}</Typography>
+                    <Typography sx={{ fontSize: 12 }}>{"Contribution"}{` (${item.PMP_QUETION.eval_percentage}% )`}</Typography>
+                    {/* <Typography sx={{ fontSize: 15, fontWeight: 'bold' }}>{item.PMP_QUETION.eval_percentage}{'%'}</Typography> */}
                   </Box>
                   <Box>
                     <BorderLinearProgress variant="determinate" value={item.score / 10} points={item.score} />
@@ -605,8 +634,8 @@ function Home() {
               {radarArray.map((item, index) => (
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingRight: 1, paddingLeft: 1 }}>
                   <Typography sx={{ width: 200, fontSize: 13 }}>{item.que_text}</Typography>
-                  <Typography sx={{ width: 80, fontSize: 13, textAlign: 'right' }}>{item.A}</Typography>
-                  <Typography sx={{ width: 80, fontSize: 13, textAlign: 'right' }}>{item.B}</Typography>
+                  <Typography sx={{ width: 80, fontSize: 13, textAlign: 'left' }}>{item.A}</Typography>
+                  <Typography sx={{ width: 80, fontSize: 13, textAlign: 'left' }}>{item.B}</Typography>
                 </Box>
               ))}
             </Box>
@@ -636,7 +665,7 @@ function Home() {
                       id="panel1bh-header"
                     >
                       <Typography
-                        sx={{ width: "100%", margin: "auto" }}
+                        sx={{ width: "100%", margin: "auto",fontWeight:'bold' }}
                       >
                         {item.PMP_QUETION.quetion_text}
                       </Typography>
@@ -644,7 +673,7 @@ function Home() {
                     <AccordionDetails>
                       <CardContent>
                         <Typography
-                          sx={{ width: "100%", margin: "auto" }}
+                          sx={{ width: "100%", margin: "auto",fontSize:14 }}
                         >
                           {item.que_comment}
                         </Typography>
@@ -662,7 +691,7 @@ function Home() {
             <div style={{ display: "flex" }}>
               <CardContent>
                 <Typography sx={styles.boldTxt}>My Manager</Typography>
-                <Avatar alt="param" src="pa.jpg" sx={styles.avatarImgStyleManager} />
+                <Avatar alt={manager} src={managerPic} sx={styles.avatarImgStyleManager} />
               </CardContent>
             </div>
           </Paper>
@@ -689,28 +718,28 @@ function Home() {
             </div>
           </Paper>
 
-          <Paper elevation={3} sx={{ ...styles.singleScoreCard, marginBottom: 2, padding: 0 }}>
+          <Paper elevation={3} sx={{
+            ...styles.singleScoreCard,
+            marginBottom: 2,
+            padding: 0,
+            background:
+              "linear-gradient(90deg, rgba(244,129,38,1) 0%, rgba(238,83,75,0.8746849081429446) 49%, rgba(233,45,118,1) 100%)",
+          }}>
             <div style={{ display: "flex" }}>
               <CardContent>
-                <Typography sx={styles.boldTxt}>Redemable Points</Typography>
-
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                  <RedeemOutlinedIcon
-                    sx={{
-                      fontSize: 45,
-                      color: '#F48126',
-                      marginRight: 2
-                    }}
-                  />
+                <Typography sx={{ ...styles.boldTxt, color: '#ffffff' }}>Redeemable Points</Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: 1, marginBottom: -1 }}>
+                  <Paper elevation={3} sx={{ height: 'auto', padding: 1, borderRadius: 10 }} >
+                    <Box sx={{ height: 35, width: 35 }} ref={imageref} />
+                  </Paper>
                   <Chip label="670" variant="outlined" sx={{
                     height: 27,
                     fontWeight: 'bold',
                     fontSize: 18,
-                    backgroundColor: '#E92D76',
-                    color: '#ffffff'
+                    marginLeft: 2,
+                    backgroundColor: '#ffffff',
+                    color: 'rgba(244,129,38,1)'
                   }} />
-
-                  {/* <Typography>670</Typography> */}
                 </Box>
               </CardContent>
             </div>
