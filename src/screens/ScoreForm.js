@@ -96,7 +96,6 @@ function ScoreForm() {
       if (response.status === 200) {
         if (response.data.dbResponse?.length > 0) {
           let arr = response.data.dbResponse;
-          alert('arr[1].score' + arr[1].score)
           setMeetingScore(arr[1].score.toString());
           setMeetingReview(arr[1].que_comment);
           setTaskDeadlineScore(arr[2].score.toString());
