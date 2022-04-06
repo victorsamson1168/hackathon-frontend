@@ -15,6 +15,7 @@ import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import ArrowForwardIosTwoToneIcon from "@mui/icons-material/ArrowForwardIosTwoTone";
 import API from "../services/APIService";
+import moment from "moment";
 
 const styles = {
   paperHeight: { height: "auto" },
@@ -64,6 +65,13 @@ function ScoreForm() {
   const [memberLoading, setMemberLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
 
+
+
+  useEffect(() => {
+    getChildList();
+    // getUserScores();
+  }, []);
+
   const getChildList = async () => {
     setMemberLoading(true);
     try {
@@ -77,10 +85,34 @@ function ScoreForm() {
     }
   };
 
-  useEffect(() => {
-    getChildList();
-  }, []);
+  const getUserScores = async (id) => {
+    let month = moment().month();
 
+    // alert('activeEmpFormId' + id)
+
+    try {
+      setFormLoading(true);
+      const response = await API.getUserScore(id, month);
+      if (response.status === 200) {
+        if (response.data.dbResponse?.length > 0) {
+          let arr = response.data.dbResponse;
+          alert('arr[1].score' + arr[1].score)
+          setMeetingScore(arr[1].score.toString());
+          setMeetingReview(arr[1].que_comment);
+          setTaskDeadlineScore(arr[2].score.toString());
+          setTaskDeadlineReview(arr[2].que_comment);
+          setBehaviourScore(arr[3].score.toString());
+          setBehaviourReview(arr[3].que_comment);
+          setAboveAndBeyondScore(arr[4].score.toString());
+          setAboveAndBeyondReview(arr[5].que_comment);
+        }
+      }
+      setFormLoading(false);
+    } catch (error) {
+      console.log('catch err', error);
+      setFormLoading(false);
+    }
+  };
   const handleClose = () => {
     setOpen(false);
   };
@@ -320,6 +352,7 @@ function ScoreForm() {
                       setActiveEmpFormName(
                         `${item.first_name} ${item.last_name}`
                       );
+                      getUserScores(item.uuid);
                     }}
                   >
                     <Avatar
@@ -377,6 +410,8 @@ function ScoreForm() {
                     label="Meeting Participation"
                     variant="outlined"
                     size="small"
+                    // defaultValue={meetingScore}
+                    value={meetingScore}
                     fullWidth
                     style={{ marginRight: 10 }}
                     required
@@ -387,6 +422,7 @@ function ScoreForm() {
                     label="Task & Deadlines"
                     variant="outlined"
                     size="small"
+                    value={taskDeadlineScore}
                     fullWidth
                     style={{ marginRight: 10 }}
                     required
@@ -397,6 +433,7 @@ function ScoreForm() {
                     label="Inter-Personal Behaviour"
                     variant="outlined"
                     size="small"
+                    value={behaviourScore}
                     fullWidth
                     style={{ marginRight: 10 }}
                     required
@@ -407,6 +444,7 @@ function ScoreForm() {
                     label="Above & Beyond"
                     variant="outlined"
                     size="small"
+                    value={aboveAndBeyondScore}
                     fullWidth
                     required
                     error={beyondError}
@@ -441,6 +479,7 @@ function ScoreForm() {
                     variant="outlined"
                     size="small"
                     fullWidth
+                    value={meetingReview}
                     rows={2}
                     required
                     error={meetErrorRev}
@@ -460,6 +499,7 @@ function ScoreForm() {
                     variant="outlined"
                     size="small"
                     fullWidth
+                    value={taskDeadlineReview}
                     // rows={2}
                     multiline
                     required
@@ -479,6 +519,7 @@ function ScoreForm() {
                     label="Inter-Personal Behaviour"
                     variant="outlined"
                     size="small"
+                    value={behaviourReview}
                     fullWidth
                     rows={4}
                     required
@@ -497,6 +538,7 @@ function ScoreForm() {
                     label="Above & Beyond"
                     variant="outlined"
                     size="small"
+                    value={aboveAndBeyondReview}
                     fullWidth
                     rows={2}
                     required
