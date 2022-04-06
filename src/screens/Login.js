@@ -52,7 +52,7 @@ function Login() {
           "user_details",
           JSON.stringify(response.data.reponse.user_details)
         );
-        history.push("/");
+          window.location.href = "/";
       } else if (response.status === 200 && !response.data.result) {
         setMessage(response.data.message);
         setOpen(true);
@@ -121,7 +121,8 @@ function Login() {
               width: "60%",
             }}
           >
-            <CardContent
+            <img src={"logo.png"} alt="logo" style={{width:'100%'}}/>
+            <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -129,9 +130,9 @@ function Login() {
                 width: "100%",
               }}
             >
-              <Typography variant="h5" m={2} align="center">
+              {/* <Typography variant="h5" m={2} align="center">
                 Login
-              </Typography>
+              </Typography> */}
               <TextField
                 id="outlined-basic"
                 label="username"
@@ -160,7 +161,7 @@ function Login() {
               >
                 {loading ? <CircularProgress size={"1.5rem"} /> : "LOGIN"}
               </Button>
-            </CardContent>
+            </Box>
           </Box>
         </Box>
       </Grid>

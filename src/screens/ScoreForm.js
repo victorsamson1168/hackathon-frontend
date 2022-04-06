@@ -15,6 +15,7 @@ import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import ArrowForwardIosTwoToneIcon from "@mui/icons-material/ArrowForwardIosTwoTone";
 import API from "../services/APIService";
+import moment from "moment";
 
 const styles = {
   paperHeight: { height: "auto" },
@@ -85,14 +86,13 @@ function ScoreForm() {
   };
 
   const getUserScores = async (id) => {
-    let month = 3;
+    let month = moment().month();
 
     // alert('activeEmpFormId' + id)
 
     try {
       setFormLoading(true);
       const response = await API.getUserScore(id, month);
-      console.log('bbbbbbbbbbbbbb', response);
       if (response.status === 200) {
         if (response.data.dbResponse?.length > 0) {
           let arr = response.data.dbResponse;
