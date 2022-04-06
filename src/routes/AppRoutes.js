@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import About from "../screens/About";
 import Home from "../screens/Home";
 import ScoreForm from "../screens/ScoreForm";
+import ThreeSixtyReview from "../screens/ThreeSixtyReview";
 import HRaudit from "../screens/HRaudit";
 import Login from "../screens/Login";
 import Nominations from "../screens/Nominations";
@@ -52,6 +53,14 @@ function AppRoutes() {
         component={() => (
           <ResponsiveDrawer title="score form" showDrawer={true}>
             <ScoreForm />
+          </ResponsiveDrawer>
+        )}
+      />
+      <ProtectedRoute
+        path="/three-sixty-review"
+        component={() => (
+          <ResponsiveDrawer title="360 review" showDrawer={true}>
+            <ThreeSixtyReview />
           </ResponsiveDrawer>
         )}
       />

@@ -143,19 +143,49 @@ function ResponsiveDrawer(props) {
       </List>
       <Divider />
       <List>
+        {managerViewableStatus === 1 && user_details?.isAdmin ? (
+          <ListItem
+            button
+            key="ScoreForm"
+            onClick={() => {
+              handleDrawerToggle();
+              history.push("/" + "ScoreForm");
+            }}
+          >
+            <ListItemIcon>
+              <MailIcon />
+            </ListItemIcon>
+            <ListItemText primary="ScoreForm" />
+          </ListItem>
+        ) : null}
+
         <ListItem
           button
-          key="ScoreForm"
+          key="ThreeSixtyReview"
           onClick={() => {
             handleDrawerToggle();
-            history.push("/" + "ScoreForm");
+            history.push("/" + "three-sixty-review");
           }}
         >
           <ListItemIcon>
             <MailIcon />
           </ListItemIcon>
-          <ListItemText primary="ScoreForm" />
+          <ListItemText primary="360 Review" />
         </ListItem>
+        {/* 
+        <ListItem
+          button
+          key="EOM"
+          onClick={() => {
+            handleDrawerToggle();
+            history.push("/" + "eom");
+          }}
+        >
+          <ListItemIcon>
+            <MailIcon />
+          </ListItemIcon>
+          <ListItemText primary="EOM" />
+        </ListItem> */}
 
         {nominationPhase === 1 ? (
           <ListItem
@@ -189,7 +219,7 @@ function ResponsiveDrawer(props) {
           </ListItem>
         ) : null}
 
-        {user_details.isHr ? (
+        {user_details.isHr && hRaudit === 1 ? (
           <ListItem
             button
             key="HR"
@@ -201,7 +231,7 @@ function ResponsiveDrawer(props) {
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
-            <ListItemText primary="HR" />
+            <ListItemText primary="HR audit" />
           </ListItem>
         ) : null}
       </List>

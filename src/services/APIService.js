@@ -16,6 +16,7 @@ const URLs = {
   getNominationRoute: "v1.0/get/nominies",
   getAuditStatusRoute: "v1.0/getAuditStatus",
   putVoteRoute: "v1.0/put/vote",
+  getEomRoute:'v1.0/get/eom'
 };
 
 // login api
@@ -80,6 +81,10 @@ const putVote = async (month, year, NomUuid) => {
 const getAuditStatus = async () => {
   return api.get(`${URLs.getAuditStatusRoute}`);
 };
+//get Audit Status
+const getEom = async (month,year) => {
+  return api.get(`${URLs.getEomRoute}?month=${month}&year=${year}`);
+};
 
 export default {
   login_URLs: URLs,
@@ -95,4 +100,5 @@ export default {
   getNomination,
   getAuditStatus,
   putVote,
+  getEom
 };
