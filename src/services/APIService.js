@@ -9,7 +9,10 @@ const URLs = {
   putScoreRoute: "v1.0/putScore",
   user: "v1.0/user/getById",
   colleagues: "v1.0/user/getColleges",
-  score: "v1.0/user/score"
+  score: "v1.0/user/score",
+  allUserScore: "v1.0/hr/allscore",
+  projects: "v1.0/getProjectsList",
+  yearScore: "v1.0/get/allScores"
 };
 
 // login api
@@ -45,6 +48,21 @@ const postScore = async (questionArray) => {
   return api.put(`${URLs.putScoreRoute}`, questionArray);
 };
 
+
+// hr section get all users with scores
+async function getAllUserScore(month, year) {
+  return api.get(URLs.allUserScore + `?month=${month}&year=${year}`);
+}
+
+// get all projects list
+async function getProjectsList() {
+  return api.get(URLs.projects);
+}
+// line chart score api
+async function getThisYearScore(id, year) {
+  return api.get(URLs.yearScore+`?uuid=${id}&year=${year}`);
+}
+
 export default {
   login_URLs: URLs,
   login,
@@ -53,4 +71,7 @@ export default {
   getUserById,
   getColleagues,
   getUserScore,
+  getAllUserScore,
+  getProjectsList,
+  getThisYearScore,
 };

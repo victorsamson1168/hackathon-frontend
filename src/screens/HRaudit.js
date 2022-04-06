@@ -70,6 +70,10 @@ function ScoreForm() {
   const [type, setType] = useState("");
   const [teamMembers, setTeamMembers] = useState([]);
   const [memberLoading, setMemberLoading] = useState(false);
+  const [projectLoading, setProjectLoading] = useState(false);
+  const [projectList, setProjectList] = useState([]);
+  const [teamMembersCopy, setTeamMembersCopy] = useState([]);
+
   const [formLoading, setFormLoading] = useState(false);
 
   const getChildList = async () => {
@@ -77,13 +81,47 @@ function ScoreForm() {
     try {
       const response = await API.getChildList();
       setTeamMembers(response?.data?.data);
-      console.log(response);
+      console.log("child list called", response);
       setMemberLoading(false);
     } catch (error) {
       console.log(error);
       setMemberLoading(false);
     }
   };
+
+  const getAllUsersWithScore = async () => {
+    setMemberLoading(true);
+    try {
+      const response = await API.getAllUserScore(3, 2022);
+      console.log(response);
+      setTeamMembers(response?.data?.data);
+      setTeamMembersCopy(response?.data?.data)
+      setMemberLoading(false);
+    } catch (error) {
+      console.log(error);
+      setMemberLoading(false);
+    }
+  };
+
+  const getAllProjectsList = async () => {
+
+    setProjectLoading(true);
+    try {
+      const response = await API.getProjectsList();
+
+      console.log("getProjectsList -------", response);
+      if (response.status && response.data.result) {
+        setProjectList(response.data.data)
+        setProjectListCopy(response.data.data)
+      }
+      setProjectLoading(false);
+    } catch (error) {
+      console.log(error);
+      setProjectLoading(false);
+    }
+  };
+
+
 
   const [expanded, setExpanded] = useState(false);
 
@@ -92,8 +130,11 @@ function ScoreForm() {
   };
 
   useEffect(() => {
-    getChildList();
+    // getChildList();
+    getAllProjectsList();
+    getAllUsersWithScore();
   }, []);
+
 
   const handleClose = () => {
     setOpen(false);
@@ -313,6 +354,33 @@ function ScoreForm() {
     }
   };
 
+  const filterByProject = (event) => {
+
+    console.log('eventeventeventevent', event);
+
+    let arr = teamMembersCopy;
+    // arr = arr.filter((item) => {
+    //   return item.user.project_name == event.target.value
+    // })
+
+    arr = arr.filter((item) => { return item.user.project_name == event.target.value })
+
+    console.log('arrarrarrarr', arr);
+    setTeamMembers(arr)
+    setActiveEmpFormId(null);
+    setActiveEmpFormName("");
+    setAttendanceScore(null)
+    setAttendanceReview("")
+    setMeetingScore(null)
+    setMeetingReview("")
+    setTaskDeadlineScore(null)
+    setTaskDeadlineReview("")
+    setBehaviourScore(null)
+    setBehaviourReview("")
+    setAboveAndBeyondScore(null)
+    setAboveAndBeyondReview("")
+  }
+
   return (
     <div>
       <Snackbar
@@ -339,11 +407,16 @@ function ScoreForm() {
                   id="demo-simple-select"
                   // value={lastMonth}
                   label="team"
-                  // onChange={handleChange}
+                  onChange={filterByProject}
                   size="small"
                 >
-                  <MenuItem value="drclobo">drclobo </MenuItem>
-                  <MenuItem value="i Craft">i Craft</MenuItem>
+                  {projectList.map(item => {
+                    return (
+                      <MenuItem value={item.project_name}>{item.project_name} </MenuItem>
+                    )
+                  })}
+                  {/* <MenuItem value="drclobo">drclobo </MenuItem>
+                  <MenuItem value="i Craft">i Craft</MenuItem> */}
                 </Select>
               </FormControl>
             </CardContent>
@@ -351,15 +424,26 @@ function ScoreForm() {
 
             <CardContent>
               <div style={styles.teamRowStyle}>
-                {teamMembers.map((item, index) => (
+                {teamMembers?.map((item, index) => (
                   <Button
                     disableRipple
                     style={{ textTransform: "none" }}
                     onClick={() => {
-                      setActiveEmpFormId(item.uuid);
+                      // alert('item.user.uuid :: ' + item.user.uuid)
+                      setActiveEmpFormId(item.user.uuid);
                       setActiveEmpFormName(
-                        `${item.first_name} ${item.last_name}`
+                        `${item.user.first_name} ${item.user.last_name}`
                       );
+                      setAttendanceScore(item.score[0].score)
+                      setAttendanceReview(item.score[0].que_comment)
+                      setMeetingScore(item.score[1].score)
+                      setMeetingReview(item.score[1].que_comment)
+                      setTaskDeadlineScore(item.score[2].score)
+                      setTaskDeadlineReview(item.score[2].que_comment)
+                      setBehaviourScore(item.score[3].score)
+                      setBehaviourReview(item.score[3].que_comment)
+                      setAboveAndBeyondScore(item.score[4].score)
+                      setAboveAndBeyondReview(item.score[4].que_comment)
                     }}
                   >
                     <Accordion
@@ -372,29 +456,29 @@ function ScoreForm() {
                         id="panel1bh-header"
                       >
                         <Avatar
-                          alt={item.first_name}
-                          src={item.image_url}
+                          alt={item.user.first_name}
+                          src={item.user.image_url}
                           sx={{
                             width: 55,
                             height: 55,
                             borderStyle: "solid",
-                            borderWidth: activeEmpFormId == item.uuid ? 4 : 0,
+                            borderWidth: activeEmpFormId == item.user.uuid ? 4 : 0,
                             borderColor: "primary",
                           }}
                         />
                         <Typography
                           sx={{ width: "25%", flexShrink: 0, margin: "auto" }}
                         >
-                          {item.first_name + " " + item.last_name}
+                          {item.user.first_name + " " + item.user.last_name}
                         </Typography>
                         <Typography
                           sx={{ width: "25%", flexShrink: 0, margin: "auto" }}
                         >
-                          {item.project_name}
+                          {item.user.project_name}
                         </Typography>
 
                         <Typography sx={{ color: "lightgray", margin: "auto" }}>
-                          {item.emp_id}
+                          {item.user.emp_id}
                         </Typography>
                       </AccordionSummary>
                       <AccordionDetails>
@@ -427,10 +511,15 @@ function ScoreForm() {
                                 onChange={(e) =>
                                   setAttendanceScore(e.target.value)
                                 }
-                                label="Attendance (Manually filled by HR)"
+                                // placeholder="Attendance (Manually filled by HR)"
+                                label={attendanceScore == null ? "Attendance (Manually filled by HR)" : ""}
+                                // label="Attendance (Manually filled by HR)"
                                 variant="outlined"
                                 size="small"
+                                value={attendanceScore}
+                                // defaultValue={attendanceScore}
                                 fullWidth
+                                type="text"
                                 style={{ marginRight: 10 }}
                                 required
                                 error={attError}
@@ -439,9 +528,12 @@ function ScoreForm() {
                                 onChange={(e) =>
                                   setMeetingScore(e.target.value)
                                 }
-                                label="Meeting Participation"
+                                // placeholder="Meeting Participation"
+                                label={meetingScore == null ? "Meeting Participation" : ""}
+                                // label="Meeting Participation"
                                 variant="outlined"
                                 size="small"
+                                value={meetingScore}
                                 fullWidth
                                 style={{ marginRight: 10 }}
                                 required
@@ -452,9 +544,10 @@ function ScoreForm() {
                                 onChange={(e) =>
                                   setTaskDeadlineScore(e.target.value)
                                 }
-                                label="Task & Deadlines"
+                                placeholder="Task & Deadlines"
                                 variant="outlined"
                                 size="small"
+                                value={taskDeadlineScore}
                                 fullWidth
                                 style={{ marginRight: 10 }}
                                 required
@@ -465,9 +558,10 @@ function ScoreForm() {
                                 onChange={(e) =>
                                   setBehaviourScore(e.target.value)
                                 }
-                                label="Inter-Personal Behaviour"
+                                placeholder="Inter-Personal Behaviour"
                                 variant="outlined"
                                 size="small"
+                                value={behaviourScore}
                                 fullWidth
                                 style={{ marginRight: 10 }}
                                 required
@@ -478,9 +572,10 @@ function ScoreForm() {
                                 onChange={(e) =>
                                   setAboveAndBeyondScore(e.target.value)
                                 }
-                                label="Above & Beyond"
+                                placeholder="Above & Beyond"
                                 variant="outlined"
                                 size="small"
+                                value={aboveAndBeyondScore}
                                 fullWidth
                                 required
                                 error={beyondError}
@@ -504,6 +599,7 @@ function ScoreForm() {
                                 label="Attendance"
                                 variant="outlined"
                                 size="small"
+                                value={attendanceReview}
                                 fullWidth
                                 rows={2}
                                 required
@@ -525,6 +621,7 @@ function ScoreForm() {
                                 label="Meeting Participation"
                                 variant="outlined"
                                 size="small"
+                                value={meetingReview}
                                 fullWidth
                                 rows={2}
                                 required
@@ -547,6 +644,7 @@ function ScoreForm() {
                                 label="Task & Deadlines"
                                 variant="outlined"
                                 size="small"
+                                value={taskDeadlineReview}
                                 fullWidth
                                 // rows={2}
                                 multiline
@@ -570,6 +668,7 @@ function ScoreForm() {
                                 label="Inter-Personal Behaviour"
                                 variant="outlined"
                                 size="small"
+                                value={behaviourReview}
                                 fullWidth
                                 rows={4}
                                 required
@@ -591,6 +690,7 @@ function ScoreForm() {
                                 label="Above & Beyond"
                                 variant="outlined"
                                 size="small"
+                                value={aboveAndBeyondReview}
                                 fullWidth
                                 rows={2}
                                 required
