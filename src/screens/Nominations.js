@@ -59,6 +59,12 @@ function Nominations() {
 
   const putVote = async () => {
     try {
+      if(!selectedNomination)
+      {
+        setMessage("Please select a nomination");
+        setOpen(true);
+        return;
+      }
       const response = await APIService.putVote(
         moment().month(),
         moment().year(),
@@ -72,7 +78,7 @@ function Nominations() {
     } catch (error) {
       setMessage(error.message);
       setOpen(true);
-      console.log("error test",JSON.stringify(error));
+      console.log("error test",JSON.stringify(error.data));
     }
   };
 
@@ -137,9 +143,9 @@ function Nominations() {
                   >
                     {nomination.PMP_USER.first_name}
                   </Typography>
-                  <Typography variant="h6" sx={{ textAlign: "center" }}>
+                  {/* <Typography variant="h6" sx={{ textAlign: "center" }}>
                     pt :{nomination.tot_score}
-                  </Typography>
+                  </Typography> */}
                 </Box>
               );
             })}
