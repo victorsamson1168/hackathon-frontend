@@ -22,24 +22,19 @@ const styles = {
   },
   designationRowStyle: {
     display: "flex",
-    flexDirection: "row",
-    marginTop: 5,
-    marginBottom: 5,
+    flexDirection: "row",    
   },
-  designationTextMargin: { marginLeft: 15, fontSize: 12 },
+  designationTextMargin: { marginLeft: 6, fontSize: 12 },
   userInfoContainer: {
     width: "65%",
     display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-around",
-    // marginLeft: 25,
+    flexDirection: "column",    
   },
   editBtnStyle: {
-    bgcolor: "background.paper",
     boxShadow: 3,
     borderRadius: 5,
     height: 30,
-    width: 100,
+    width: "90%",
     fontSize: 12,
   },
   boldTxt: { fontWeight: "bold", fontSize: 15, whiteSpace: "nowrap" },
@@ -66,7 +61,8 @@ function ProfileCard({ data }) {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            marginLeft: "2%"
+            marginLeft: "4%",
+            marginTop:"2%",
           }}
         >
           {/* <CardContent> */}
@@ -83,26 +79,26 @@ function ProfileCard({ data }) {
           <Avatar
             alt={user_details?.first_name}
             src={user_details?.image_url}
-            sx={{ width: 60, height: 60, boxShadow: 3 }}
+            sx={{ width: 50, height: 50, boxShadow: 3 }}
           />
-          <p style={{ fontSize: "9px" }}>{user_details?.emp_id}</p>
+          <p style={{ fontSize: "11px", fontWeight:'bold' }}>{user_details?.emp_id}</p>
 
           {/* </CardContent> */}
         </div>
         <div style={styles.userInfoContainer}>
           <div>
-            <div style={styles.designationRowStyle}>
+            <div style={{...styles.designationRowStyle,marginTop:-10}}>
               <Typography sx={styles.boldTxt}>
                 {user_details?.first_name + " " + user_details?.last_name}
               </Typography>
               {/* <p style={{fontSize:'9px'}}>{user_details?.emp_id}</p> */}
               <WorkspacePremiumTwoToneIcon
-                sx={{ width: 28, height: 28, color: gold }}
+                sx={{ fontSize:20, color: gold }}
               />
             </div>
 
-            <div style={styles.designationRowStyle}>
-              <DesktopMacOutlinedIcon />
+            <div style={{...styles.designationRowStyle,marginTop:8}}>
+              <DesktopMacOutlinedIcon sx={{ fontSize:18 }}/>
               <Typography style={styles.designationTextMargin}>
                 {user_details?.designation}
               </Typography>
@@ -113,8 +109,8 @@ function ProfileCard({ data }) {
                   {user_details?.emp_id}
                 </Typography>
               </div> */}
-            <div style={styles.designationRowStyle}>
-              <GroupsOutlinedIcon />
+            <div style={{...styles.designationRowStyle,marginTop:8}}>
+              <GroupsOutlinedIcon sx={{ fontSize:18 }}/>
               <Typography style={styles.designationTextMargin}>
                 {user_details?.project_name}
               </Typography>
@@ -131,7 +127,7 @@ function ProfileCard({ data }) {
         </div>
       </div>
       <Box
-        sx={{ width: "100%", justifyContent: "center", textAlign: "center" }}
+        sx={{ width: "100%", justifyContent: "center", textAlign: "center",backgroundColor:'white' }}
       >
         <Button
           sx={styles.editBtnStyle}

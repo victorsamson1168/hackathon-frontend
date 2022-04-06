@@ -53,7 +53,7 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme, points }) => ({
 
 const CustomizedDot = (props) => {
   const { cx, cy, stroke, payload, value } = props;
-  if (value > 800) {
+  if (value >= 800) {
     return (
       <svg
         x={cx - 9}
@@ -496,8 +496,7 @@ function Home() {
                     <Typography sx={{ fontSize: 16 }}>{item.PMP_QUETION.quetion_text}</Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Typography sx={{ fontSize: 12 }}>{"Contribution"}{` (${item.PMP_QUETION.eval_percentage}% )`}</Typography>
-                    {/* <Typography sx={{ fontSize: 15, fontWeight: 'bold' }}>{item.PMP_QUETION.eval_percentage}{'%'}</Typography> */}
+                    <Typography sx={{ fontSize: 12 }}>{"Contribution"}{` (${item.PMP_QUETION.eval_percentage}%)`}</Typography>
                   </Box>
                   <Box>
                     <BorderLinearProgress variant="determinate" value={item.score / 10} points={item.score} />
@@ -625,10 +624,10 @@ function Home() {
                 }}>
                 <Typography sx={{ width: 200, fontSize: 15, fontWeight: 'bold', }}>{'Specific to area'}</Typography>
                 <TooltipNormal title={myName} placement="top">
-                  <Typography noWrap sx={{ width: 80, fontSize: 15, fontWeight: 'bold', textAlign: 'right' }}>{myName}</Typography>
+                  <Typography noWrap sx={{ width: 80, fontSize: 15, fontWeight: 'bold', textAlign: 'left' }}>{myName}</Typography>
                 </TooltipNormal>
                 <TooltipNormal title={contrastedWith} placement="top">
-                  <Typography noWrap sx={{ width: 80, fontSize: 15, fontWeight: 'bold', textAlign: 'right' }}>{contrastedWith}</Typography>
+                  <Typography noWrap sx={{ width: 80, fontSize: 15, fontWeight: 'bold', textAlign: 'left' }}>{contrastedWith}</Typography>
                 </TooltipNormal>
               </Box>
               {radarArray.map((item, index) => (
@@ -665,7 +664,7 @@ function Home() {
                       id="panel1bh-header"
                     >
                       <Typography
-                        sx={{ width: "100%", margin: "auto",fontWeight:'bold' }}
+                        sx={{ width: "100%", margin: "auto", fontWeight: 'bold' }}
                       >
                         {item.PMP_QUETION.quetion_text}
                       </Typography>
@@ -673,7 +672,7 @@ function Home() {
                     <AccordionDetails>
                       <CardContent>
                         <Typography
-                          sx={{ width: "100%", margin: "auto",fontSize:14 }}
+                          sx={{ width: "100%", margin: "auto", fontSize: 14 }}
                         >
                           {item.que_comment}
                         </Typography>
@@ -691,7 +690,9 @@ function Home() {
             <div style={{ display: "flex" }}>
               <CardContent>
                 <Typography sx={styles.boldTxt}>My Manager</Typography>
-                <Avatar alt={manager} src={managerPic} sx={styles.avatarImgStyleManager} />
+                <TooltipNormal title={manager} placement="top">
+                  <Avatar alt={manager} src={managerPic} sx={styles.avatarImgStyleManager} />
+                </TooltipNormal>
               </CardContent>
             </div>
           </Paper>
