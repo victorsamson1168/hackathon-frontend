@@ -17,19 +17,53 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useHistory } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, Chip } from "@mui/material";
 import ProfileCard from "../components/ProfileCard/ProfileCard";
+import Lottie from "lottie-web";
+import APIService from "../services/APIService";
 
 let drawerWidth = 225;
 
 function ResponsiveDrawer(props) {
   const { window, children, title, showDrawer } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [managerViewableStatus, setManagerViewableStatus] = React.useState(0);
+  const [hRaudit, setHRaudit] = React.useState(0);
+  const [nominationPhase, setNominationPhase] = React.useState(0);
+  const [eomDeclared, setEomDeclared] = React.useState(0);
+
   const user_details = JSON.parse(localStorage.getItem("user_details"));
   const history = useHistory();
+  const imageref = React.useRef(null);
   if (!showDrawer) {
     drawerWidth = 0;
   }
+
+  React.useEffect(() => {
+    getAuditStatus();
+    Lottie.loadAnimation({
+      container: imageref.current, // the dom element that will contain the animation
+      renderer: "svg",
+      loop: true,
+      autoplay: true,
+      animationData: require("../assets/animations/gift.json"), // the path to the animation json
+    });
+  }, []);
+
+  const getAuditStatus = async () => {
+    try {
+      const response = await APIService.getAuditStatus();
+      if (response.status === 200) {
+        console.log(response.data.data);
+        setManagerViewableStatus(response?.data?.data[0]?.status);
+        setHRaudit(response?.data?.data[1]?.status);
+        setNominationPhase(response?.data?.data[2]?.status);
+        setEomDeclared(response?.data?.data[3]?.status);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -44,9 +78,6 @@ function ResponsiveDrawer(props) {
   const drawer = (
     <div>
       <Toolbar>
-        {/* <Typography variant="h6" noWrap>
-          PMP
-        </Typography> */}
         <img src="/logo.png" alt="logo" style={{ width: "90%" }} />
       </Toolbar>
       <Divider />
@@ -61,6 +92,25 @@ function ResponsiveDrawer(props) {
           />
         </Grid> */}
       </Grid>
+      <Divider />
+      <ListItem button key="redeem">
+        <ListItemIcon>
+          {/* <InboxIcon /> */}
+          <Box sx={{ height: 40 }} ref={imageref} />
+        </ListItemIcon>
+        <ListItemText primary="redeem points" />
+      </ListItem>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          marginBottom: 2,
+        }}
+      >
+        <Chip label="points 100" color="primary" />
+      </Box>
+
       <Divider />
       <List>
         <ListItem
@@ -106,6 +156,38 @@ function ResponsiveDrawer(props) {
           </ListItemIcon>
           <ListItemText primary="ScoreForm" />
         </ListItem>
+
+        {nominationPhase === 1 ? (
+          <ListItem
+            button
+            key="nominations"
+            onClick={() => {
+              handleDrawerToggle();
+              history.push("/" + "nominations");
+            }}
+          >
+            <ListItemIcon>
+              <MailIcon />
+            </ListItemIcon>
+            <ListItemText primary="nominations" />
+          </ListItem>
+        ) : null}
+
+        {eomDeclared === 1 ? (
+          <ListItem
+            button
+            key="eom"
+            onClick={() => {
+              handleDrawerToggle();
+              history.push("/" + "eom");
+            }}
+          >
+            <ListItemIcon>
+              <MailIcon />
+            </ListItemIcon>
+            <ListItemText primary="eom" />
+          </ListItem>
+        ) : null}
 
         {user_details.isHr ? (
           <ListItem

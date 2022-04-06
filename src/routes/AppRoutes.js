@@ -7,6 +7,7 @@ import HRaudit from "../screens/HRaudit";
 import Login from "../screens/Login";
 import Nominations from "../screens/Nominations";
 import Eom from "../screens/Eom";
+import Redeem from "../screens/Redeem";
 import ResponsiveDrawer from "../screens/ResponsiveDrawer";
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -33,7 +34,7 @@ function AppRoutes() {
       <ProtectedRoute
         path="/nominations"
         component={() => (
-          <ResponsiveDrawer title="nominations" showDrawer={false}>
+          <ResponsiveDrawer title="nominations" showDrawer={true}>
             <Nominations />
           </ResponsiveDrawer>
         )}
@@ -41,7 +42,7 @@ function AppRoutes() {
       <ProtectedRoute
         path="/eom"
         component={() => (
-          <ResponsiveDrawer title="employee of the month" showDrawer={false}>
+          <ResponsiveDrawer title="employee of the month" showDrawer={true}>
             <Eom />
           </ResponsiveDrawer>
         )}
@@ -49,7 +50,7 @@ function AppRoutes() {
       <ProtectedRoute
         path="/scoreform"
         component={() => (
-          <ResponsiveDrawer title="score form"  showDrawer={true}>
+          <ResponsiveDrawer title="score form" showDrawer={true}>
             <ScoreForm />
           </ResponsiveDrawer>
         )}
@@ -57,8 +58,16 @@ function AppRoutes() {
       <ProtectedRoute
         path="/HR"
         component={() => (
-          <ResponsiveDrawer title="HR audit"  showDrawer={true}>
-            <HRaudit/>
+          <ResponsiveDrawer title="HR audit" showDrawer={true}>
+            <HRaudit />
+          </ResponsiveDrawer>
+        )}
+      />
+      <ProtectedRoute
+        path="/redeem"
+        component={() => (
+          <ResponsiveDrawer title="Redeem points" showDrawer={true}>
+            <Redeem />
           </ResponsiveDrawer>
         )}
       />
