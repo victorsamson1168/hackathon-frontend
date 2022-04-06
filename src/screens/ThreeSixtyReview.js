@@ -65,8 +65,6 @@ function ScoreForm() {
   const [memberLoading, setMemberLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
 
-
-
   useEffect(() => {
     getChildList();
     // getUserScores();
@@ -96,7 +94,7 @@ function ScoreForm() {
       if (response.status === 200) {
         if (response.data.dbResponse?.length > 0) {
           let arr = response.data.dbResponse;
-          alert('arr[1].score' + arr[1].score)
+          alert("arr[1].score" + arr[1].score);
           setMeetingScore(arr[1].score.toString());
           setMeetingReview(arr[1].que_comment);
           setTaskDeadlineScore(arr[2].score.toString());
@@ -109,7 +107,7 @@ function ScoreForm() {
       }
       setFormLoading(false);
     } catch (error) {
-      console.log('catch err', error);
+      console.log("catch err", error);
       setFormLoading(false);
     }
   };
@@ -274,7 +272,7 @@ function ScoreForm() {
     try {
       const response = await API.postScore([
         {
-          uuid: activeEmpFormId,
+          uuid: 2,
           month: moment().month(),
           year: moment().year(),
           que_idx: 2,
@@ -282,7 +280,7 @@ function ScoreForm() {
           que_comment: meetingReview,
         },
         {
-          uuid: activeEmpFormId,
+          uuid: 2,
           month: moment().month(),
           year: moment().year(),
           que_idx: 3,
@@ -290,7 +288,7 @@ function ScoreForm() {
           que_comment: taskDeadlineReview,
         },
         {
-          uuid: activeEmpFormId,
+          uuid: 2,
           month: moment().month(),
           year: moment().year(),
           que_idx: 4,
@@ -298,7 +296,7 @@ function ScoreForm() {
           que_comment: behaviourReview,
         },
         {
-          uuid: activeEmpFormId,
+          uuid: 2,
           month: moment().month(),
           year: moment().year(),
           que_idx: 5,

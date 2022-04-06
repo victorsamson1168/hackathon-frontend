@@ -296,38 +296,45 @@ function ScoreForm() {
   };
 
   const saveUserApiCall = async () => {
-    //   alert("api call " + activeEmpFormId);
     setFormLoading(true);
     try {
       const response = await API.postScore([
         {
           uuid: activeEmpFormId,
-          month: 3,
-          year: 2022,
+          month: moment().month(),
+          year: moment().year(),
+          que_idx: 1,
+          score: attendanceScore,
+          que_comment: attendanceReview,
+        },
+        {
+          uuid: activeEmpFormId,
+          month: moment().month(),
+          year: moment().year(),
           que_idx: 2,
           score: meetingScore,
           que_comment: meetingReview,
         },
         {
           uuid: activeEmpFormId,
-          month: 3,
-          year: 2022,
+          month: moment().month(),
+          year: moment().year(),
           que_idx: 3,
           score: taskDeadlineScore,
           que_comment: taskDeadlineReview,
         },
         {
           uuid: activeEmpFormId,
-          month: 3,
-          year: 2022,
+          month: moment().month(),
+          year: moment().year(),
           que_idx: 4,
           score: behaviourScore,
           que_comment: behaviourReview,
         },
         {
           uuid: activeEmpFormId,
-          month: 3,
-          year: 2022,
+          month: moment().month(),
+          year: moment().year(),
           que_idx: 5,
           score: aboveAndBeyondScore,
           que_comment: aboveAndBeyondReview,
