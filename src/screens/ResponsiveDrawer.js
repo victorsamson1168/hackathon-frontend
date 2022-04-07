@@ -21,6 +21,10 @@ import { Button, Grid, Chip } from "@mui/material";
 import ProfileCard from "../components/ProfileCard/ProfileCard";
 import Lottie from "lottie-web";
 import APIService from "../services/APIService";
+import HomeIcon from '@mui/icons-material/Home';
+import StarBorderPurple500Icon from '@mui/icons-material/StarBorderPurple500';
+import PersonPinIcon from '@mui/icons-material/PersonPin';
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 
 let drawerWidth = 225;
 
@@ -103,7 +107,7 @@ function ResponsiveDrawer(props) {
           {/* <InboxIcon /> */}
           <Box sx={{ height: 40 }} ref={imageref} />
         </ListItemIcon>
-        <ListItemText primary="redeem points" />
+        <ListItemText primary="Redeem Points" />
       </ListItem>
       <Box
         sx={{
@@ -113,7 +117,7 @@ function ResponsiveDrawer(props) {
           marginBottom: 2,
         }}
       >
-        <Chip label="points 100" color="primary" />
+        <Chip label="points 6700" color="primary" />
       </Box>
 
       <Divider />
@@ -127,9 +131,9 @@ function ResponsiveDrawer(props) {
           }}
         >
           <ListItemIcon>
-            <InboxIcon />
+            <HomeIcon />
           </ListItemIcon>
-          <ListItemText primary="home" />
+          <ListItemText primary="Home" />
         </ListItem>
 
         <ListItem
@@ -143,7 +147,7 @@ function ResponsiveDrawer(props) {
           <ListItemIcon>
             <InboxIcon />
           </ListItemIcon>
-          <ListItemText primary="about" />
+          <ListItemText primary="About" />
         </ListItem>
 
 
@@ -162,7 +166,7 @@ function ResponsiveDrawer(props) {
             <ListItemIcon>
               <MailIcon />
             </ListItemIcon>
-            <ListItemText primary="ScoreForm" />
+            <ListItemText primary="Score Form" />
           </ListItem>
         ) : null}
 
@@ -175,7 +179,7 @@ function ResponsiveDrawer(props) {
           }}
         >
           <ListItemIcon>
-            <MailIcon />
+            <SettingsBackupRestoreIcon />
           </ListItemIcon>
           <ListItemText primary="360 Review" />
         </ListItem>
@@ -206,7 +210,7 @@ function ResponsiveDrawer(props) {
             <ListItemIcon>
               <MailIcon />
             </ListItemIcon>
-            <ListItemText primary="nominations" />
+            <ListItemText primary="Nominations" />
           </ListItem>
         ) : null}
 
@@ -220,9 +224,9 @@ function ResponsiveDrawer(props) {
             }}
           >
             <ListItemIcon>
-              <MailIcon />
+              <PersonPinIcon />
             </ListItemIcon>
-            <ListItemText primary="eom" />
+            <ListItemText primary="EOM" />
           </ListItem>
         ) : null}
 
@@ -238,7 +242,7 @@ function ResponsiveDrawer(props) {
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
-            <ListItemText primary="HR audit" />
+            <ListItemText primary="HR Audit" />
           </ListItem>
         ) : null}
 
@@ -255,7 +259,7 @@ function ResponsiveDrawer(props) {
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
-            <ListItemText primary="redeemRequest" />
+            <ListItemText primary="Redeem Request" />
           </ListItem>}
       </List>
       <Divider />
