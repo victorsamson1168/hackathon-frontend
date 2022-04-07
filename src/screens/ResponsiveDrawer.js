@@ -121,7 +121,7 @@ function ResponsiveDrawer(props) {
       </Box>
 
       <Divider />
-      <List>
+      <List> 
         <ListItem
           button
           key="home"
