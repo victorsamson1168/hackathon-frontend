@@ -11,7 +11,7 @@ import Eom from "../screens/Eom";
 import Redeem from "../screens/Redeem";
 import ResponsiveDrawer from "../screens/ResponsiveDrawer";
 import ProtectedRoute from "./ProtectedRoute";
-
+import RedeemRequest from "../screens/RedeemRequest";
 function AppRoutes() {
   return (
     <Switch>
@@ -80,6 +80,16 @@ function AppRoutes() {
           </ResponsiveDrawer>
         )}
       />
+
+<ProtectedRoute
+        path="/redeemRequest"
+        component={() => (
+          <ResponsiveDrawer title="Redeem Requests" showDrawer={true}>
+            <RedeemRequest />
+          </ResponsiveDrawer>
+        )}
+      />
+      
       <Route path="/login" component={() => <Login />} />
     </Switch>
   );
