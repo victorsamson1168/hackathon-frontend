@@ -136,7 +136,7 @@ function ResponsiveDrawer(props) {
           <ListItemText primary="Home" />
         </ListItem>
 
-        <ListItem
+        {/* <ListItem
           button
           key="about"
           onClick={() => {
@@ -148,7 +148,7 @@ function ResponsiveDrawer(props) {
             <InboxIcon />
           </ListItemIcon>
           <ListItemText primary="About" />
-        </ListItem>
+        </ListItem> */}
 
 
       </List>
