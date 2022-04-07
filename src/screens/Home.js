@@ -452,7 +452,7 @@ function Home() {
     setContrastedWith(
       event.target.value.first_name + " " + event.target.value.last_name
     );
-    createRadarData(event.target.value.uuid, uuid, lastRadarMonthIndex);
+    createRadarData(event.target.value.uuid, null, lastRadarMonthIndex);
   };
 
   return (
