@@ -93,7 +93,12 @@ function ResponsiveDrawer(props) {
         </Grid> */}
       </Grid>
       <Divider />
-      <ListItem button key="redeem">
+      <ListItem button key="redeem"
+        onClick={() => {
+          handleDrawerToggle();
+          history.push("/redeem");
+        }}
+      >
         <ListItemIcon>
           {/* <InboxIcon /> */}
           <Box sx={{ height: 40 }} ref={imageref} />
@@ -140,6 +145,8 @@ function ResponsiveDrawer(props) {
           </ListItemIcon>
           <ListItemText primary="about" />
         </ListItem>
+
+
       </List>
       <Divider />
       <List>
@@ -234,6 +241,22 @@ function ResponsiveDrawer(props) {
             <ListItemText primary="HR audit" />
           </ListItem>
         ) : null}
+
+
+        {user_details.isHr &&
+          <ListItem
+            button
+            key="redeemRequest"
+            onClick={() => {
+              handleDrawerToggle();
+              history.push("/redeemRequest");
+            }}
+          >
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="redeemRequest" />
+          </ListItem>}
       </List>
       <Divider />
     </div>

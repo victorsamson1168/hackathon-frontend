@@ -438,7 +438,7 @@ function Home() {
               }
 
 
-              {totalScore &&
+              {totalScore > 0 && scoreFound == 200 &&
                 <Chip
                   label={"Total Score : " + totalScore}
                   // variant="outlined"
@@ -733,7 +733,7 @@ function Home() {
                   <Paper elevation={3} sx={{ height: 'auto', padding: 1, borderRadius: 10 }} >
                     <Box sx={{ height: 35, width: 35 }} ref={imageref} />
                   </Paper>
-                  <Chip label="670" variant="outlined" sx={{
+                  <Chip label="6700" variant="outlined" sx={{
                     height: 27,
                     fontWeight: 'bold',
                     fontSize: 18,
