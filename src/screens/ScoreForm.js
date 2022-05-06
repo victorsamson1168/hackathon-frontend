@@ -98,7 +98,7 @@ function ScoreForm() {
 
     try {
       setFormLoading(true);
-      const response = await API.getUserScore(id, month);
+      const response = await API.getUserScore(id, month);   
       if (response.status === 200) {
         if (response.data.dbResponse?.length > 0) {
           let arr = response.data.dbResponse;
