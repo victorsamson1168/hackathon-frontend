@@ -65,12 +65,18 @@ function ScoreForm() {
   const [memberLoading, setMemberLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
 
-
-
   useEffect(() => {
     getChildList();
     // getUserScores();
   }, []);
+
+
+  useEffect(()=>{
+    console.log('====================================');
+    console.log(meetingScore);
+    console.log('====================================');
+
+  },[meetingScore])
 
   const getChildList = async () => {
     setMemberLoading(true);
@@ -86,7 +92,7 @@ function ScoreForm() {
   };
 
   const getUserScores = async (id) => {
-    let month = moment().month();
+    let month = moment().month() + 1;
 
     // alert('activeEmpFormId' + id)
 
@@ -96,19 +102,19 @@ function ScoreForm() {
       if (response.status === 200) {
         if (response.data.dbResponse?.length > 0) {
           let arr = response.data.dbResponse;
-          setMeetingScore(arr[1].score.toString());
-          setMeetingReview(arr[1].que_comment);
-          setTaskDeadlineScore(arr[2].score.toString());
-          setTaskDeadlineReview(arr[2].que_comment);
-          setBehaviourScore(arr[3].score.toString());
-          setBehaviourReview(arr[3].que_comment);
-          setAboveAndBeyondScore(arr[4].score.toString());
-          setAboveAndBeyondReview(arr[5].que_comment);
+          setMeetingScore(arr[0].score.toString());
+          setMeetingReview(arr[0].que_comment);
+          setTaskDeadlineScore(arr[1].score.toString());
+          setTaskDeadlineReview(arr[1].que_comment);
+          setBehaviourScore(arr[2].score.toString());
+          setBehaviourReview(arr[2].que_comment);
+          setAboveAndBeyondScore(arr[3].score.toString());
+          setAboveAndBeyondReview(arr[3].que_comment);
         }
       }
       setFormLoading(false);
     } catch (error) {
-      console.log('catch err', error);
+      console.log("catch err", error);
       setFormLoading(false);
     }
   };
@@ -274,7 +280,7 @@ function ScoreForm() {
       const response = await API.postScore([
         {
           uuid: activeEmpFormId,
-          month: moment().month(),
+          month: moment().month()+1,
           year: moment().year(),
           que_idx: 2,
           score: meetingScore,
@@ -282,7 +288,7 @@ function ScoreForm() {
         },
         {
           uuid: activeEmpFormId,
-          month: moment().month(),
+          month: moment().month()+1,
           year: moment().year(),
           que_idx: 3,
           score: taskDeadlineScore,
@@ -290,7 +296,7 @@ function ScoreForm() {
         },
         {
           uuid: activeEmpFormId,
-          month: moment().month(),
+          month: moment().month()+1,
           year: moment().year(),
           que_idx: 4,
           score: behaviourScore,
@@ -298,7 +304,7 @@ function ScoreForm() {
         },
         {
           uuid: activeEmpFormId,
-          month: moment().month(),
+          month: moment().month()+1,
           year: moment().year(),
           que_idx: 5,
           score: aboveAndBeyondScore,
@@ -311,6 +317,15 @@ function ScoreForm() {
         setType("success");
         setOpen(true);
         setFormLoading(false);
+        setMeetingScore("");
+        setMeetingReview("");
+        setTaskDeadlineScore("");
+        setTaskDeadlineReview("");
+        setBehaviourScore("");
+        setBehaviourReview("");
+        setAboveAndBeyondScore("");
+        setAboveAndBeyondReview("");
+
       } else {
         setMessage("something went wrong");
         setType("error");
@@ -347,6 +362,14 @@ function ScoreForm() {
                 {teamMembers.map((item, index) => (
                   <Button
                     onClick={() => {
+                      setMeetingScore("");
+                      setMeetingReview("");
+                      setTaskDeadlineScore("");
+                      setTaskDeadlineReview("");
+                      setBehaviourScore("");
+                      setBehaviourReview("");
+                      setAboveAndBeyondScore("");
+                      setAboveAndBeyondReview("");
                       setActiveEmpFormId(item.uuid);
                       setActiveEmpFormName(
                         `${item.first_name} ${item.last_name}`
