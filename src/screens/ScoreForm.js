@@ -107,7 +107,7 @@ function ScoreForm() {
           setTaskDeadlineScore(arr[1].score.toString());
           setTaskDeadlineReview(arr[1].que_comment);
           setBehaviourScore(arr[2].score.toString());
-          setBehaviourReview(arr[2].que_comment);
+          setBehaviourReview(arr[2].que_comment); 
           setAboveAndBeyondScore(arr[3].score.toString());
           setAboveAndBeyondReview(arr[3].que_comment);
         }
